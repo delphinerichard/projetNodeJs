@@ -1,0 +1,19 @@
+{
+  "name": "projetnodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://delphinerichard@bitbucket.org/delphinerichard/projetnodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/delphinerichard/projetnodejs#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
