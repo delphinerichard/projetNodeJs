@@ -1,0 +1,33 @@
+<body>
+
+<h1>Service d'aministration de ChatBot</h1>
+
+<p>Bienvenue</p>
+
+<form action="/" method="post" id="creationBot">
+    <input type="text" name="Nom du bot" id="nom" placeholder="Entrez un nom" size="50" autofocus />
+    <input type="submit" id="creation" value="Créer le bot" />
+</form>
+
+<p>Liste des cerveaux : </p>
+<p id="zone_chat">      
+</p>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script>
+    $('#creationBot').submit(function () {
+        console.log = "yo";
+        var nom = $('#nom').val();
+        ajoutBot(nom);
+        $('#nom').val('').focus();
+        return false;
+    });
+    
+    
+    function ajoutBot(nom) {
+        $('#zone_chat').prepend('<p><strong>-</strong> ' + nom + '</p>');
+    }
+</script>
+
+</body>

@@ -15,5 +15,9 @@
   "homepage": "https://bitbucket.org/delphinerichard/projetnodejs#readme",
   "devDependencies": {
     "nodemon": "^2.0.3"
+  },
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "rivescript": "^2.1.0"
   }
 }
