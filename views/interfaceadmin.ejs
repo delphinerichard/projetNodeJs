@@ -1,33 +1,41 @@
-<body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Administration des bots</title>
+    </head>
 
-<h1>Service d'aministration de ChatBot</h1>
+    <body>
 
-<p>Bienvenue</p>
+        <h1>Service d'aministration de ChatBot</h1>
 
-<form action="/" method="post" id="creationBot">
-    <input type="text" name="Nom du bot" id="nom" placeholder="Entrez un nom" size="50" autofocus />
-    <input type="submit" id="creation" value="Créer le bot" />
-</form>
+        <p>Bienvenue</p>
 
-<p>Liste des cerveaux : </p>
-<p id="zone_chat">      
-</p>
+        <form action="/" method="post" id="creationBot">
+            <input type="text" name="Nom du bot" id="nom" placeholder="Entrez un nom" size="50" autofocus />
+            <input type="submit" id="creation" value="Créer le bot" />
+        </form>
 
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <p>Liste des cerveaux : </p>
+        <p id="zone_chat">      
+        </p>
 
-<script>
-    $('#creationBot').submit(function () {
-        console.log = "yo";
-        var nom = $('#nom').val();
-        ajoutBot(nom);
-        $('#nom').val('').focus();
-        return false;
-    });
-    
-    
-    function ajoutBot(nom) {
-        $('#zone_chat').prepend('<p><strong>-</strong> ' + nom + '</p>');
-    }
-</script>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-</body>
+        <script>
+            $('#creationBot').submit(function () {
+                console.log = "yo";
+                var nom = $('#nom').val();
+                ajoutBot(nom);
+                $('#nom').val('').focus();
+                return false;
+            });
+            
+            
+            function ajoutBot(nom) {
+                $('#zone_chat').prepend('<p><strong>-</strong> ' + nom + '</p>');
+            }
+        </script>
+
+    </body>
+</html>

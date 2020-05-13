@@ -3,13 +3,29 @@ const app = express();
 
 const PORT = 5000;
 
+/*
+POST	/admin			    Créé un nouveau ChatBot
+PUT		/admin/botID		Permet de modifier les informations du bot
+DELETE	/admin/botID		Permet de supprimer l'accès à Discord du ChatBot botID
+GET		/admin			    Donne l'état des ChatBots créés
 
-app.get('/', function(req, res) {
+JSON avec les infos du bot : id, nom, cerveau attribué, autorisation à garder les infos des utilisateurs, interface (Discord, Slack, etc)
+*/
+
+app.get('/admin', function(req, res) {
     res.render('interfaceadmin.ejs');
 });
 
-app.post('/', function(req, res) {
+app.post('/admin', function(req, res) {
     res.render('interfaceadmin.ejs');
+});
+
+app.put('/admin/:botnum', function(req, res) {
+    res.render('interfaceadmin.ejs', {botnum: req.params.botnum});
+});
+
+app.get('/admin/:botnum', function(req, res) {
+    res.render('interfaceadmin.ejs', {botnum: req.params.botnum});
 });
 
 app.use(function(req, res, next){
@@ -18,5 +34,3 @@ app.use(function(req, res, next){
 });
 
 app.listen(PORT, console.log('Démarrage du serveur sur le port '+PORT));
-
-
