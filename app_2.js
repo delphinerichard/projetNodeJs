@@ -3,13 +3,17 @@ const app = express();
 
 const PORT = 5000;
 
+var myRouter = express.Router();
+
+myRouter.route('/admin')
+
 //GET sur l'URI /admin donne l'état de tous les bots créés
-app.get('/admin/', function(req, res) {
+.get(function(req, res) {
     res.render('interfaceadmin.ejs');
-});
+})
 
 //POST sur l'URI /admin permet de créer un nouveau bot
-app.post('/admin/', function(req, res) {
+.post(function(req, res) {
     res.render('interfaceadmin.ejs');
 });
 
@@ -18,10 +22,13 @@ app.post('/admin/', function(req, res) {
 //DELETE sur l'URI /admin/botID permet de supprimer l'accès à Dicord du bot ayant pour identifiant botID
 
 
-app.use(function(req, res, next){
-    res.setHeader('Content-Type', 'text/plain');
-    res.status(404).send('Page introuvable !');
-});
+myRouter.route('/')
+
+.all(function(req,res){
+    res.json({message : "Bienvenue sur le site d'administration des ChatBots. Veuillez vous rendre à l'adresse localhost:5000/admin pour gérer les ChatBots.", methode : req.method});
+})
+
+app.use(myRouter);
 
 app.listen(PORT, console.log('Démarrage du serveur sur le port '+PORT));
 
