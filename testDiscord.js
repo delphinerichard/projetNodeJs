@@ -4,6 +4,8 @@ const cerveau = new Rivescript();
 
 const client = new Discord.Client();
 var reponse = false;
+var Bot = require('./modeles/bot');
+
 
 cerveau.loadFile("cerveaux/bonjour.rive").then(loading_done).catch(loading_error);
 

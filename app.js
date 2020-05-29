@@ -1,22 +1,29 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const interfaceDiscord = require('./interfaceDiscord');
+
+const tableauInterfaces = [];
 
 app.use(express.json())
-
-const PORT = 5000;
 
 //Connexion à la base de données
 mongoose.connect('mongodb://localhost/chatbots', {useNewUrlParser:true, useUnifiedTopology:true});
 let bdd = mongoose.connection;
 mongoose.set('useFindAndModify', false);
 
-bdd.once('open', ()=>{
-    console.log("La base de donnees est connectee");
-})
 
 // Recupère le modèle d'un bot dans la base
 var Bot = require('./modeles/bot');
+
+bdd.once('open', function(){
+    console.log("La base de données est connectée");
+    Bot.updateMany({},{"actif":false}).exec();
+})
+
+
+
+const PORT = 5000;
 
 /*
 POST	/admin			    Créé un nouveau ChatBot
@@ -27,26 +34,82 @@ GET		/admin			    Donne l'état des ChatBots créés
 JSON avec les infos du bot : id, nom, cerveau attribué, autorisation à garder les infos des utilisateurs, interface (Discord, Slack, etc)
 */
 
-app.get('/admin', function(req, res) {
+app.get('/affichage', function(req, res) {
     res.render('affichageBots.ejs');
 });
 
-app.get('/bots/all', function(req,res){
+app.get('/admin', function(req,res){
     // Interroge la base pour retrouver tous les bots
     Bot.find({},function(err,bots){
         if(err) {
-            res.status(400).json({msg: "Une erreur a eu lieu"});
-        }
-        else {
+            res.status(400).json({msg: "Impossible d'afficher les bots"});
+        }else {
             res.json({bots});
         }
     });
 })
 
-app.post('/bots/',function(req,res){
-    console.log(req.body)
-    res.json({})
+app.post('/admin',function(req,res){
+    console.log(req.body);
+    var nouveauBot = new Bot(req.body);
+    console.log(nouveauBot);
+    nouveauBot.save().then(function(bot){
+        res.json(bot)
+    }).catch(function(err){
+        res.status(400).json({msg: "Impossible d'ajouter le bot dans la bdd"});
+    })
 })
+
+app.put('/admin/:botID',function(req,res){
+    console.log(req.body);
+    Bot.findByIdAndUpdate(req.params.botID, req.body,function(err,bot){
+        if(err) {
+            res.status(400).json({msg: "Impossible de mettre à jour le bot"});
+        }else {  
+            Bot.findById(req.params.botID, function(err, nouveauBot){
+                if(nouveauBot.interface == "Discord" && nouveauBot.actif && (!bot.actif || bot.interface != "Discord")){
+                    var interfaceD = new interfaceDiscord(nouveauBot.nom, nouveauBot.cerveau);
+                    /*tableauInterfaces.push({
+                        "bot":nouveauBot, 
+                        "interface":interfaceD});*/
+                    tableauInterfaces.push([nouveauBot, interfaceD]);
+                    console.log(tableauInterfaces);
+                    interfaceD.init();
+                }else{
+                    if(nouveauBot.interface == "Discord" && nouveauBot.actif){
+                        /*for(let object of tableauInterfaces){
+                            if(object.bot._id==nouveauBot._id){
+
+                            }
+                        }*/
+                        
+                        for (let i =0; i<tableauInterfaces.length; i++){
+                            if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
+                                tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
+                                tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
+                            }
+                        }
+                        
+                    }
+                }
+                res.json({msg : "Mise à jour du bot réussie"});  
+            })
+        }
+    });
+
+})
+
+
+app.delete('/admin/:botID',function(req,res){
+    Bot.findByIdAndDelete(req.params.botID,function(err,bot){
+        if(err) {
+            res.status(400).json({msg: "Impossible de supprimer le bot"});
+        }else {
+            res.json({msg : "Suppression du bot réussie"});
+        }
+    });
+})
+
 
 /*
 app.get('/test', function(req,res){

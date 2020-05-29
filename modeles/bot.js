@@ -2,19 +2,24 @@ const mongoose = require('mongoose');
 
 let botSchema = mongoose.Schema({
     nom:{
-        type: String
+        type: String,
+        required:true
     },
     cerveau:{
-        type: String
+        type: String,
+        default:"standard"
     },
     sauvegardeDonnees:{
-        type: Boolean
+        type: Boolean,
+        default:false
     },
     interface:{
-        type: String
+        type: String,
+        default:"Discord"
     },
     actif:{
-        type: Boolean
+        type: Boolean,
+        default:false
     }
 })
 
