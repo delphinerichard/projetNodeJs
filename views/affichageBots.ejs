@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Administration des bots</title>
+    </head>
+
+    <body>
+
+        <h1>Service d'aministration de ChatBot</h1>
+
+        <p>Bienvenue</p>
+
+        <form method = ''
+        <button> Ajouter cerveaux </button>
+
+        <p>Liste des cerveaux actifs : </p>
+        <table id = 'r'>
+            <style>
+                table{border-collapse: collapse;}
+                td, th {border: 1px solid black;}
+            </style>
+            <caption>Liste des bots actifs</caption>
+         
+            <tr>
+                <th>Nom</th>
+                <th>Cerveau</th>
+                <th>Sauvegarde 
+                    données</th>
+                <th>Interface</th>
+                <th>Actif</th>
+            </tr>
+            <tr>
+                <td>Bot1</td>
+                <td>bonjour</td>
+                <td>non</td>
+                <td>Discord</td>
+                <td>non</td>
+            </tr>
+            <tr>
+                <td><script>
+                    console.log("ayaya");
+            $('#r').append('<tr><td>Age</td> : </p>'); </script></td>
+                <td>26 ans</td>
+                <td>États-Unis</td>
+            </tr>
+         </table>
+        <p id="zone_chat">
+        </p>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+        <script>
+            for (i = 0; i< len(app.listeBot); i++){
+                ajoutBot(app.listeBot[i]);
+            }
+
+            
+            function ajoutBot(fichier) {
+                $('#zone_chat').prepend('<p><strong>-</strong> ' + fichier.nom + '</p>');
+            }
+        </script>
+
+    </body>
+</html>

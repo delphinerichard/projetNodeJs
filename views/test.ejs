@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>CV</title>
+  <link rel="stylesheet" href="essai.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  
+<div><h1> Curiculum Vitae (CV) </h1></div>
+  
+<button id="aperçu"> Aperçu </button>
+<div id="r">Voici le <b>CV</b> de la personne. Pour le voir veuillez cliquer sur le <strong>bouton</strong> <i>aperçu</i> ci-dessous SVP.</div>
+  
+ 
+<script>
+    $(function() {
+        $('#aperçu').click(function() {
+            $.getJSON('bot.json', function(donnees) {
+            $('#r').html('<p><b>Nom</b> : ' + donnees.nom + '</p>');
+            $('#r').append('<p><b>Age</b> : ' + donnees.interface + '</p>');
+            $('#r').append('<p><b>Ville</b> : ' + donnees.cerveau + '</p>');
+            $('#r').append('<p><b>Domaine de compétences</b> : ' + donnees.active + '</p>');
+            });
+        });
+    });
+</script>
+  
+</body>
+  
+</html>
