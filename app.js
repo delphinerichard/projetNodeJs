@@ -50,7 +50,6 @@ app.get('/admin', function(req,res){
 })
 
 app.post('/admin',function(req,res){
-    console.log(req.body);
     var nouveauBot = new Bot(req.body);
     console.log(nouveauBot);
     nouveauBot.save().then(function(bot){
@@ -61,7 +60,6 @@ app.post('/admin',function(req,res){
 })
 
 app.put('/admin/:botID',function(req,res){
-    console.log(req.body);
     Bot.findByIdAndUpdate(req.params.botID, req.body,function(err,bot){
         if(err) {
             res.status(400).json({msg: "Impossible de mettre à jour le bot"});
@@ -69,19 +67,10 @@ app.put('/admin/:botID',function(req,res){
             Bot.findById(req.params.botID, function(err, nouveauBot){
                 if(nouveauBot.interface == "Discord" && nouveauBot.actif && (!bot.actif || bot.interface != "Discord")){
                     var interfaceD = new interfaceDiscord(nouveauBot.nom, nouveauBot.cerveau);
-                    /*tableauInterfaces.push({
-                        "bot":nouveauBot, 
-                        "interface":interfaceD});*/
                     tableauInterfaces.push([nouveauBot, interfaceD]);
-                    console.log(tableauInterfaces);
                     interfaceD.init();
                 }else{
                     if(nouveauBot.interface == "Discord" && nouveauBot.actif){
-                        /*for(let object of tableauInterfaces){
-                            if(object.bot._id==nouveauBot._id){
-
-                            }
-                        }*/
                         
                         for (let i =0; i<tableauInterfaces.length; i++){
                             if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){

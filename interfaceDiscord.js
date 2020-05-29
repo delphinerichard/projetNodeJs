@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const Rivescript = require('rivescript');
-const cerveau = new Rivescript();
-const client = new Discord.Client();
+var cerveau = new Rivescript();
 
 var reponse = false;
 var Bot = require('./modeles/bot');
 
 class interfaceDiscord{
     constructor(nomBot, cerveauBot){
+        this.client = new Discord.Client();
         this.nomBot = nomBot;
         this.cerveauBot = cerveauBot;
         this.token = 'NzA5NDYzNzI1NTM0MzQ3MzM1.Xrmmhw.QNtxrKED9Zm5Ax0ytVdyPVty89U';
@@ -15,23 +15,13 @@ class interfaceDiscord{
     }
 
     init(){
-        cerveau.loadFile(this.nomCerveau).then(loading_done).catch(loading_error);
+        this.chargerCerveau();
 
-        function loading_done(){
-            console.log("Le cerveau est pret");
-            cerveau.sortReplies();
-        }
-        
-        function loading_error(error){
-            console.log("Erreur :"+error);
-        }
-
-        client.once('ready', () => {
-            console.log('Le bot est pret !');
+        this.client.once('ready', () => {
+            console.log('Le bot '+this.nomBot+' est pret !');
         });
         
-        client.on('message', message => {
-            console.log(message.content);
+        this.client.on('message', message => {
             if (!reponse){
                 cerveau.reply("user", message.content).then(function(reply){
                     message.channel.send(reply);
@@ -42,13 +32,19 @@ class interfaceDiscord{
             }
         });
 
-        client.login(this.token);
+        this.client.login(this.token);
     }
 
     majCerveau(nouveauCerveau){
-        this.nomCerveau = "./cerveaux/"+nouveauCerveau+".rive";
-        cerveau.loadFile(this.nomCerveau).then(loading_done).catch(loading_error);
+        this.cerveauBot = nouveauCerveau;
+        this.nomCerveau = "cerveaux/"+nouveauCerveau+".rive";
+        cerveau = new Rivescript();
+        this.chargerCerveau();
 
+    }
+
+    chargerCerveau(){
+        cerveau.loadFile(this.nomCerveau).then(loading_done).catch(loading_error);
         function loading_done(){
             console.log("Le cerveau est pret");
             cerveau.sortReplies();
@@ -57,6 +53,7 @@ class interfaceDiscord{
         function loading_error(error){
             console.log("Erreur :"+error);
         }
+
     }
 
 }
