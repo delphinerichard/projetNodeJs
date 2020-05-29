@@ -11,8 +11,23 @@
 
         <p>Bienvenue</p>
 
-        <form method = ''
-        <button> Ajouter cerveaux </button>
+
+        <form action = "/admin" method ="get">
+            <button> Afficher Bots </button>
+        </form>
+
+        <form action = "/admin" method ="post">
+            <input type="name" id="nom" name="nom" placeholder="Nom du bot"></input>
+            <button> Créer Bot </button>
+        </form>
+
+        <form action = "/admin/botID" method ="put">
+            <button> Modifier Bot </button>
+        </form>
+        
+        <form action = "/admin/botID" method ="delete">
+            <button> Supprimer Bot </button>
+        </form>
 
         <p>Liste des cerveaux actifs : </p>
         <table id = 'r'>

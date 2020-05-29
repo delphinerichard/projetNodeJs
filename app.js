@@ -6,6 +6,7 @@ const interfaceDiscord = require('./interfaceDiscord');
 const tableauInterfaces = [];
 
 app.use(express.json())
+app.use(express.urlencoded({extended:false}))
 
 //Connexion à la base de données
 mongoose.connect('mongodb://localhost/chatbots', {useNewUrlParser:true, useUnifiedTopology:true});
