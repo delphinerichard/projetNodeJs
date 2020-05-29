@@ -1,0 +1,19 @@
+[
+	{	
+		"id": 1,
+		"name": "Don",
+		"brains": [], 
+		"discord": false
+	},
+	{	"id": 2,
+		"name": "Patrick",
+		"brains": [], 
+		"discord": false
+	},
+	{
+		"id": 3,
+		"name": "Jean-Paul",
+		"brains": [], 
+		"discord": false
+	}
+]
