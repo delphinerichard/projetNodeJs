@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const interfaceDiscord = require('./interfaceDiscord');
+const interfaceChat = require('./interfaceChat');
 
 const tableauInterfaces = [];
 
@@ -71,15 +72,28 @@ app.put('/admin/:botID',function(req,res){
                     tableauInterfaces.push([nouveauBot, interfaceD]);
                     interfaceD.init();
                 }else{
-                    if(nouveauBot.interface == "Discord" && nouveauBot.actif){
-                        
+                    if(nouveauBot.interface == "Discord" && nouveauBot.actif){                        
                         for (let i =0; i<tableauInterfaces.length; i++){
                             if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
                                 tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
                                 tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
                             }
+                        }   
+                    }else{
+                        if(nouveauBot.interface == "Chat" && nouveauBot.actif && (!bot.actif || bot.interface != "Chat")){
+                            var interfaceC = new interfaceChat(nouveauBot.nom, nouveauBot.cerveau);
+                            tableauInterfaces.push([nouveauBot, interfaceC]);
+                            interfaceC.init();
+                        }else{
+                            if(nouveauBot.interface == "Chat" && nouveauBot.actif){                        
+                                for (let i =0; i<tableauInterfaces.length; i++){
+                                    if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
+                                        tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
+                                        tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
+                                    }
+                                }   
+                            }
                         }
-                        
                     }
                 }
                 res.json({msg : "Mise à jour du bot réussie"});  
