@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const interfaceDiscord = require('./interfaceDiscord');
-const interfaceChat = require('./interfaceChat');
+const interfaceDiscord = require('./interfaces/interfaceDiscord');
+const interfaceChat = require('./interfaces/interfaceChat');
 
 const tableauInterfaces = [];
 

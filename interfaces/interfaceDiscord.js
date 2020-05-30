@@ -1,38 +1,38 @@
-var app = require('express')(),
-    server = require('http').createServer(app)
-
+const Discord = require('discord.js');
 const Rivescript = require('rivescript');
 var cerveau = new Rivescript();
-var io = require('socket.io').listen(server);
-var ent = require('ent');
 
-var Bot = require('./modeles/bot');
+var reponse = false;
+var Bot = require('../modeles/bot');
 
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/chat.html');
-  });
-
-
-
-class interfaceChat{
+class interfaceDiscord{
     constructor(nomBot, cerveauBot){
+        this.client = new Discord.Client();
         this.nomBot = nomBot;
         this.cerveauBot = cerveauBot;
+        this.token = 'NzA5NDYzNzI1NTM0MzQ3MzM1.Xrmmhw.QNtxrKED9Zm5Ax0ytVdyPVty89U';
         this.nomCerveau = "cerveaux/"+cerveauBot+".rive";
     }
 
     init(){
         this.chargerCerveau();
-        io.sockets.on('connection', function (socket, pseudo) {
 
-            socket.on('message', function (message) {
-                message = ent.encode(message);
-                cerveau.reply("user", message).then(function(reply){
-                    socket.emit('message', {pseudo: "bot", message: reply});
+        this.client.once('ready', () => {
+            console.log('Le bot '+this.nomBot+' est pret !');
+        });
+        
+        this.client.on('message', message => {
+            if (!reponse){
+                cerveau.reply("user", message.content).then(function(reply){
+                    message.channel.send(reply);
+                    reponse = true;
                 });
-            }); 
+            }else{
+                reponse = false;
+            }
         });
 
+        this.client.login(this.token);
     }
 
     majCerveau(nouveauCerveau){
@@ -53,9 +53,9 @@ class interfaceChat{
         function loading_error(error){
             console.log("Erreur :"+error);
         }
+
     }
 
 }
 
-server.listen(8080);
-module.exports = interfaceChat;
+module.exports = interfaceDiscord;
