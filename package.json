@@ -17,6 +17,7 @@
     "nodemon": "^2.0.3"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "discord.js": "^12.2.0",
     "ejs": "^3.1.2",
     "ent": "^2.2.0",

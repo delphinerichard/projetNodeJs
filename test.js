@@ -11,7 +11,7 @@ var ent = require('ent');
 //var server = require('http').createServer(app)
 
 const interfaceDiscord = require('./interfaces/interfaceDiscord');
-const interfaceChat = require('./interfaces/interfaceChat');
+//const interfaceChat = require('./interfaces/interfaceChat');
 
 const tableauInterfaces = [];
 
@@ -50,11 +50,7 @@ JSON avec les infos du bot : id, nom, cerveau attribué, autorisation à garder 
 */
 
 app.get('/affichage', function(req, res) {
-    res.render('interfaceAdmin.ejs');
-});
-
-app.get('/chat/:botID', function(req, res) {
-    res.render('chat.ejs', {id: req.params.botID});
+    res.render('test2.ejs');
 });
 
 app.get('/admin', function(req,res){
@@ -80,17 +76,18 @@ app.post('/admin',function(req,res){
     //res.redirect('/affichage');
 })
 
+//METHODE A SUPPR SI JAMAIS
 app.post('/parler/a/:botID', function(req,res){
     let message = req.body.message;
+    console.log(tableauInterfaces)
     for (let i =0; i<tableauInterfaces.length; i++){
         if (tableauInterfaces[i][0]._id.equals(req.params.botID)){
             try {
-                tableauInterfaces[i][1].parler(message, (reponse => {
-                    res.json({pseudo: tableauInterfaces[i][0].nom, reponse: reponse})
-                }));
+                tableauInterfaces[i][1].parler(message, (reponse => res.json({reponse: reponse})));
             } catch (error) {
                 res.json({msg: "Erreur"})
             }
+            //res.json({reponse: reponse});
         }
     }
 })
@@ -103,7 +100,15 @@ app.put('/admin/:botID',function(req,res){
             Bot.findById(req.params.botID, function(err, nouveauBot){
                 if(nouveauBot.interface == "Discord" && nouveauBot.actif && (!bot.actif || bot.interface != "Discord")){
                     var interfaceD = new interfaceDiscord(nouveauBot.nom, nouveauBot.cerveau);
-                    suppression(nouveauBot._id);
+                    let indice = null;
+                    for (let i =0; i<tableauInterfaces.length; i++){
+                        if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
+                            indice = i;
+                        }
+                    }
+                    if(indice) {
+                        tableauInterfaces.splice(indice,1);
+                    }
                     tableauInterfaces.push([nouveauBot, interfaceD]);
                     interfaceD.init();
                 }else{
@@ -117,7 +122,15 @@ app.put('/admin/:botID',function(req,res){
                     }else{
                         if(nouveauBot.interface == "Chat" && nouveauBot.actif && (!bot.actif || bot.interface != "Chat")){
                             var interfaceC = new interfaceChat(nouveauBot.nom, nouveauBot.cerveau);
-                            suppression(nouveauBot._id)
+                            let indice = null;
+                            for (let i =0; i<tableauInterfaces.length; i++){
+                                if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
+                                    indice = i;
+                                }
+                            }
+                            if(indice) {
+                                tableauInterfaces.splice(indice,1);
+                            }
                             tableauInterfaces.push([nouveauBot, interfaceC]);
                             interfaceC.init();
                         }else{
@@ -138,18 +151,6 @@ app.put('/admin/:botID',function(req,res){
     });
 
 })
-
-function suppression (botID){
-    let indice = null;
-    for (let i =0; i<tableauInterfaces.length; i++){
-        if (tableauInterfaces[i][0]._id.equals(botID)){
-            indice = i;
-        }
-    }
-    if(indice != null) {
-        tableauInterfaces.splice(indice,1);
-    }
-}
 
 
 app.delete('/admin/:botID',function(req,res){
@@ -186,10 +187,60 @@ app.get('/admin/:botnum', function(req, res) {
 */
 
 
+
+
+
+app.get('/', function (req, res) {
+    res.render('chat.ejs');
+});
+
 app.use(function(req, res, next){
     res.setHeader('Content-Type', 'text/plain');
     res.status(404).send('Page introuvable !');
 });
 
+class interfaceChat{
+    constructor(nomBot, cerveauBot){
+        this.nomBot = nomBot;
+        this.cerveauBot = cerveauBot;
+        this.nomCerveau = "cerveaux/"+cerveauBot+".rive";
+    }
+
+    init(){
+        this.chargerCerveau();
+        io.sockets.on('connection', function (socket, pseudo) {
+
+            socket.on('message', function (message) {
+                message = ent.encode(message);
+                cerveau.reply("user", message).then(function(reply){
+                    socket.emit('message', {pseudo: "bot", message: reply});
+                });
+            }); 
+        });
+
+    }
+
+    majCerveau(nouveauCerveau){
+        this.cerveauBot = nouveauCerveau;
+        this.nomCerveau = "cerveaux/"+nouveauCerveau+".rive";
+        cerveau = new Rivescript();
+        this.chargerCerveau();
+
+    }
+
+    chargerCerveau(){
+        cerveau.loadFile(this.nomCerveau).then(loading_done).catch(loading_error);
+        function loading_done(){
+            console.log("Le cerveau est pret");
+            cerveau.sortReplies();
+        }
+        
+        function loading_error(error){
+            console.log("Erreur :"+error);
+        }
+    }
+
+}
 
 app.listen(PORT, console.log('Démarrage du serveur sur le port '+PORT));
+//module.exports = interfaceChat;
