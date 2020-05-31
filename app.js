@@ -8,7 +8,6 @@ const Rivescript = require('rivescript');
 var cerveau = new Rivescript();
 var io = require('socket.io').listen(server);
 var ent = require('ent');
-//var server = require('http').createServer(app)
 
 const interfaceDiscord = require('./interfaces/interfaceDiscord');
 const interfaceChat = require('./interfaces/interfaceChat');
@@ -17,16 +16,12 @@ const tableauInterfaces = [];
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
-//app.use(cors)
-
-
 
 
 //Connexion à la base de données
 mongoose.connect('mongodb://localhost/chatbots', {useNewUrlParser:true, useUnifiedTopology:true});
 let bdd = mongoose.connection;
 mongoose.set('useFindAndModify', false);
-
 
 // Recupère le modèle d'un bot dans la base
 var Bot = require('./modeles/bot');
@@ -36,26 +31,37 @@ bdd.once('open', function(){
     Bot.updateMany({},{"actif":false}).exec();
 })
 
-
-
 const PORT = 5000;
 
-/*
-POST	/admin			    Créé un nouveau ChatBot
-PUT		/admin/botID		Permet de modifier les informations du bot
-DELETE	/admin/botID		Permet de supprimer l'accès à Discord du ChatBot botID
-GET		/admin			    Donne l'état des ChatBots créés
-
-JSON avec les infos du bot : id, nom, cerveau attribué, autorisation à garder les infos des utilisateurs, interface (Discord, Slack, etc)
-*/
-
+// Affichage de l'interface administrateur
 app.get('/', function(req, res) {
     res.render('interfaceAdmin.ejs');
 });
 
+//Affichage du chat
 app.get('/chat/:botID', function(req, res) {
     res.render('chat.ejs', {id: req.params.botID});
 });
+
+//Gestion du chat
+app.post('/admin',function(req,res){
+    var nouveauBot = new Bot(req.body);
+    console.log(nouveauBot);
+    nouveauBot.save().then(function(bot){
+        res.json({bot, msg: "Bot ajouté !"})
+    }).catch(function(err){
+        res.status(400).json({msg: "Impossible d'ajouter le bot dans la bdd"});
+    })
+})
+
+
+/*
+GET		/admin			    Donne l'état des ChatBots créés
+POST	/admin			    Créé un nouveau ChatBot
+PUT		/admin/botID		Permet de modifier les informations du bot
+DELETE	/admin/botID		Permet de supprimer l'accès à Discord du ChatBot botID
+*/
+
 
 app.get('/admin', function(req,res){
     // Interroge la base pour retrouver tous les bots
@@ -68,15 +74,6 @@ app.get('/admin', function(req,res){
     });
 })
 
-app.post('/admin',function(req,res){
-    var nouveauBot = new Bot(req.body);
-    console.log(nouveauBot);
-    nouveauBot.save().then(function(bot){
-        res.json({bot, msg: "Bot ajouté !"})
-    }).catch(function(err){
-        res.status(400).json({msg: "Impossible d'ajouter le bot dans la bdd"});
-    })
-})
 
 app.post('/parler/a/:botID', function(req,res){
     let message = req.body.message;
@@ -101,31 +98,22 @@ app.put('/admin/:botID',function(req,res){
             Bot.findById(req.params.botID, function(err, nouveauBot){
                 if(nouveauBot.interface == "Discord" && nouveauBot.actif && (!bot.actif || bot.interface != "Discord")){
                     var interfaceD = new interfaceDiscord(nouveauBot.nom, nouveauBot.cerveau);
-                    suppression(nouveauBot._id);
+                    suppressionDuTableau(nouveauBot._id);
                     tableauInterfaces.push([nouveauBot, interfaceD]);
                     interfaceD.init();
                 }else{
-                    if(nouveauBot.interface == "Discord" && nouveauBot.actif){                        
-                        for (let i =0; i<tableauInterfaces.length; i++){
-                            if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
-                                tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
-                                tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
-                            }
-                        }   
+                    if(nouveauBot.interface == "Discord" && nouveauBot.actif){
+                        miseAJourCerveau(nouveauBot);                        
+                          
                     }else{
                         if(nouveauBot.interface == "Chat" && nouveauBot.actif && (!bot.actif || bot.interface != "Chat")){
                             var interfaceC = new interfaceChat(nouveauBot.nom, nouveauBot.cerveau);
-                            suppression(nouveauBot._id)
+                            suppressionDuTableau(nouveauBot._id)
                             tableauInterfaces.push([nouveauBot, interfaceC]);
                             interfaceC.init();
                         }else{
                             if(nouveauBot.interface == "Chat" && nouveauBot.actif){                        
-                                for (let i =0; i<tableauInterfaces.length; i++){
-                                    if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
-                                        tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
-                                        tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
-                                    }
-                                }   
+                                miseAJourCerveau(nouveauBot);  
                             }
                         }
                     }
@@ -136,18 +124,6 @@ app.put('/admin/:botID',function(req,res){
     });
 
 })
-
-function suppression (botID){
-    let indice = null;
-    for (let i =0; i<tableauInterfaces.length; i++){
-        if (tableauInterfaces[i][0]._id.equals(botID)){
-            indice = i;
-        }
-    }
-    if(indice != null) {
-        tableauInterfaces.splice(indice,1);
-    }
-}
 
 
 app.delete('/admin/:botID',function(req,res){
@@ -161,33 +137,35 @@ app.delete('/admin/:botID',function(req,res){
 })
 
 
-/*
-app.get('/test', function(req,res){
-    res.json(bot)
-})
+//Fonction permettant de supprimer l'interface correspondant à botID du tableau
+function suppressionDuTableau (botID){
+    let indice = null;
+    for (let i =0; i<tableauInterfaces.length; i++){
+        if (tableauInterfaces[i][0]._id.equals(botID)){
+            indice = i;
+        }
+    }
+    if(indice != null) {
+        tableauInterfaces.splice(indice,1);
+    }
+}
 
-app.get('/cerveau/:num/a/:nom', function(req,res){
-    res.json({msg: `Cerveau n°${req.params.num} assigne a ${req.params.nom}`})
-})
-
-app.post('/admin', function(req, res) {
-    res.render('interfaceadmin.ejs');
-});
-
-app.put('/admin/:botnum', function(req, res) {
-    res.render('interfaceadmin.ejs', {botnum: req.params.botnum});
-});
-
-app.get('/admin/:botnum', function(req, res) {
-    res.render('interfaceadmin.ejs', {botnum: req.params.botnum});
-});
-*/
+//Fonction permettant de mettre à jour le cerveau du bot nouveauBot
+function miseAJourCerveau(nouveauBot){
+    for (let i =0; i<tableauInterfaces.length; i++){
+        if (tableauInterfaces[i][0]._id.equals(nouveauBot._id)){
+            tableauInterfaces[i][1].majCerveau(nouveauBot.cerveau);
+            tableauInterfaces[i][1].cerveau = nouveauBot.cerveau;
+        }
+    } 
+}
 
 
+//Si l'adresse n'est pas la bonne, on indique que la page est introuvable
 app.use(function(req, res, next){
     res.setHeader('Content-Type', 'text/plain');
-    res.status(404).send('Page introuvable !');
+    res.status(404).send('Page introuvable ! Essayez http://localhost:5000/');
 });
 
-
+//On écoute sur le port PORT
 app.listen(PORT, console.log('Démarrage du serveur sur le port '+PORT));
