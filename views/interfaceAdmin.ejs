@@ -14,27 +14,44 @@
             <button> Afficher Bots </button>
         </form>
 
-        <form action = "/admin" method ="post">
-            <input id="nom" name="nom" placeholder="Nom du bot"></input>
-            <button> Créer Bot </button>
-        </form>
+        <input id="nom" name="nom" placeholder="Nom du bot"></input>
+        <button onclick="ajouterBot()"> Créer le bot </button>
 
         <input type="text" name="idBotSuppr" id="idBotSuppr" placeholder="Id du bot" size="50" autofocus />
         <button onclick="supprimerBot()"> Supprimer le bot </button>
 
 
         <script type="text/javascript">
-            function supprimerBot() {
-                var req = new XMLHttpRequest();
-                var requete = "http://localhost:5000/admin/"+idBotSuppr.value;
-                req.open("DELETE", requete);
-                //Indique que le contenu de la requête est au format JSON
-                req.setRequestHeader("Content-Type", "application/json");
-                req.send(null)
-                alert('Bot '+idBotSuppr.value+' supprimé !');
+
+            function ajouterBot (){
+                fetch("/admin/", {
+                    method: "POST",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({nom: nom.value})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
                 idBotSuppr.value = '';
             }
 
+
+            function supprimerBot() {
+                fetch("/admin/"+idBotSuppr.value, {
+                    method: "DELETE",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBotSuppr.value = '';
+            }
         </script>
     </body>
 </html>

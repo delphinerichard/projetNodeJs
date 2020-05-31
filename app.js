@@ -66,18 +66,16 @@ app.get('/admin', function(req,res){
             res.json({bots});
         }
     });
-    //res.redirect('/affichage');
 })
 
 app.post('/admin',function(req,res){
     var nouveauBot = new Bot(req.body);
     console.log(nouveauBot);
     nouveauBot.save().then(function(bot){
-        res.json(bot)
+        res.json({bot, msg: "Bot ajouté !"})
     }).catch(function(err){
         res.status(400).json({msg: "Impossible d'ajouter le bot dans la bdd"});
     })
-    //res.redirect('/affichage');
 })
 
 app.post('/parler/a/:botID', function(req,res){
