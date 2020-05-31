@@ -49,7 +49,7 @@ GET		/admin			    Donne l'état des ChatBots créés
 JSON avec les infos du bot : id, nom, cerveau attribué, autorisation à garder les infos des utilisateurs, interface (Discord, Slack, etc)
 */
 
-app.get('/affichage', function(req, res) {
+app.get('/', function(req, res) {
     res.render('interfaceAdmin.ejs');
 });
 

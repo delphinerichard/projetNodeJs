@@ -36,9 +36,7 @@ class interfaceDiscord{
     }
 
     parler(message, callback){
-        cerveau.reply("user", message).then(function(reply){
-            callback(reply)
-        });
+        callback("Je ne suis pas connecté sur la bonne interface")
     }
 
     majCerveau(nouveauCerveau){

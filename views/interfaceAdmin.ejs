@@ -7,21 +7,58 @@
 
     <body>
         <h1>Service d'aministration de ChatBot</h1>
-        <p>Bienvenue</p>
 
+        <p>Affichage des bots</p>
+        <div>
+            <button onclick="afficherBots()"> Afficher les bots </button>
+        </div>
+        
+        <p>Ajout des bots</p>
+        <div>
+            <input id="nom" name="nom" placeholder="Nom du bot"></input>
+            <button onclick="ajouterBot()"> Créer le bot </button>
+        </div>
 
-        <form action = "/admin" method ="get" >
-            <button> Afficher Bots </button>
-        </form>
+        <p>Modification des bots</p>
+        <div>
+            <input type="text" name="idBot" id="idBot" placeholder="Id du bot à modifier" size="50" autofocus />
+        </div>
+        <div>
+            <button onclick="supprimerBot()"> Supprimer le bot </button>
+            <button onclick="activerBot()"> Activer le bot </button>
+            <button onclick="desactiverBot()"> Desactiver le bot </button>
+        </div>
+        <div>
+            <button onclick="chat()"> Passer le bot sur l'interface Chat </button>
+            <button onclick="discord()"> Passer le bot sur l'interface Discord </button>
+        </div>
+        <div>
+            <p>Liste des cerveaux : <br><strong>- </strong> standard<br><strong>- </strong> cerveau1</p>
+            <input type="text" name="nouveauCerveau" id="nouveauCerveau" placeholder="Nom du nouveau cerveau" size="27" autofocus />
+            <button onclick="changerCerveau()"> Changer de cerveau </button>
+        </div>
 
-        <input id="nom" name="nom" placeholder="Nom du bot"></input>
-        <button onclick="ajouterBot()"> Créer le bot </button>
+        <p>Liste des bots : </p>
+        <p id="affichage_bots">      
+        </p>
 
-        <input type="text" name="idBotSuppr" id="idBotSuppr" placeholder="Id du bot" size="50" autofocus />
-        <button onclick="supprimerBot()"> Supprimer le bot </button>
+        <textarea name="bots" id="bots" cols="140" rows="10"></textarea>
 
 
         <script type="text/javascript">
+
+            function afficherBots (){
+                fetch("/admin/", {
+                    method: "GET",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    bots.value=JSON.stringify(data.bots);
+                })
+            }            
 
             function ajouterBot (){
                 fetch("/admin/", {
@@ -35,12 +72,12 @@
                 .then(data => {
                     alert(data.msg)
                 })
-                idBotSuppr.value = '';
+                nom.value = '';
             }
 
 
             function supprimerBot() {
-                fetch("/admin/"+idBotSuppr.value, {
+                fetch("/admin/"+idBot.value, {
                     method: "DELETE",
                     headers:{
                         'Accept': 'application/json',
@@ -50,8 +87,85 @@
                 .then(data => {
                     alert(data.msg)
                 })
-                idBotSuppr.value = '';
+                idBot.value = '';
             }
+
+            function changerCerveau() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({cerveau: nouveauCerveau.value})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+                nouveauCerveau.value='';
+            }
+
+            function activerBot() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({actif: true})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function desactiverBot() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({actif: false})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function chat() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({interface: 'Chat'})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function discord() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({interface: 'Discord'})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
         </script>
     </body>
 </html>

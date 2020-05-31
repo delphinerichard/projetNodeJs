@@ -8,6 +8,10 @@ Lancez ensuite MongoDB avec la commande `sudo systemctl start mongod`.
 
 Vous pouvez ensuite lancer le serveur avec la commande `npm run dev`.
 
-Pour accéder à l'interface créée par nos soins permettant de discuter avec le bot, vous devez vous rendre à l'adresse http://localhost:8080. N'oubliez pas de recharger la page après avoir activé un bot pour vous répondre.
+Pour accéder à l'interface créée par nos soins permettant de discuter avec le bot, vous devez vous rendre à l'adresse http://localhost:5000/chat/botID où botID est l'identifiant du bot avec lequel vous voulez discuter. N'oubliez pas de recharger la page après avoir activé un bot pour vous répondre.
 
 Vous pouvez également vous connecter sur Discord sur le serveur de Delphine (lien d'invitation : https://discord.gg/J6DDebg) pour pouvoir discuter avec nos bots.
+
+Pour accéder à l'interface d'administration des bots, vous devez vous rendre à l'adresse http://localhost:5000.
+
+Par défaut, les bots créés sont tous inactifs au démarrage du serveur. N'oubliez pas de les activer avant d'essayer de leur parler.
