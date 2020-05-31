@@ -7,24 +7,36 @@
             body {
                 font-family: sans-serif !important;
             }
+            h2 {
+                color: white;
+            }
         </style>
     </head>
-
+    
     <body>
+
+        
         <h1>Service d'aministration de ChatBot</h1>
 
-        <p>Affichage des bots</p>
-        <div>
-            <button onclick="afficherBots()"> Afficher les bots </button>
-        </div>
-        
-        <p>Ajout des bots</p>
-        <div>
-            <input id="nom" name="nom" placeholder="Nom du bot"></input>
-            <button onclick="ajouterBot()"> Créer le bot </button>
-        </div>
+        <table >
+            <td>
+                <h3><strong>Affichage des bots </strong></h3>
+                <div>
+                    <button onclick="afficherBots()"> Afficher les bots </button>
+                </div>
+            </td>
+            <td><h2>............</h2></td>
+            <td>
+                <h3><strong> Ajout des bots</strong></h3>
+                <div>
+                    <input id="nom" name="nom" placeholder="Nom du bot"></input>
+                    <button onclick="ajouterBot()"> Créer le bot </button>
+                </div>
+            </td>
 
-        <p>Modification des bots</p>
+            </table>
+
+            <h3><strong>Modification des bots</strong></h3>
         <div>
             <input type="text" name="idBot" id="idBot" placeholder="Id du bot à modifier" size="50" autofocus />
         </div>
@@ -38,14 +50,19 @@
             <button onclick="discord()"> Passer le bot sur l'interface Discord </button>
         </div>
         <div>
-            <p>Liste des cerveaux : <br><strong>- </strong> standard<br><strong>- </strong> cerveau1</p>
-            <input type="text" name="nouveauCerveau" id="nouveauCerveau" placeholder="Nom du nouveau cerveau" size="27" autofocus />
-            <button onclick="changerCerveau()"> Changer de cerveau </button>
+            <table>
+                <td>
+                    <input type="text" name="nouveauCerveau" id="nouveauCerveau" placeholder="Nom du nouveau cerveau" size="27" autofocus />
+                    <button onclick="changerCerveau()"> Changer de cerveau </button>
+                </td>
+                <td><br></td>
+                <td>
+                    <p><i>Cerveaux disponibles : standard, cerveau1</i></p>
+                </td>
+            </table>
         </div>
 
-        <p>Liste des bots : </p>
-        <p id="affichage_bots">      
-        </p>
+        <h3><strong>Liste des bots : </strong></h3>
 
         <textarea name="bots" id="bots" cols="140" rows="10"></textarea>
 
