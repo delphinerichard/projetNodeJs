@@ -4,24 +4,29 @@
         <meta charset="utf-8" />
         <title>Notre interface de Chat</title>
         <style>
-            #zone_chat strong {
-                color: white;
-                background-color: black;
-                padding: 2px;
+            body {
+                font-family: sans-serif !important;
             }
+            #zone_chat{
+                background: #e4e8fb ;
+                padding: 5px 20px 5px 20px;
+                width: 90%;
+		}
         </style>
     </head>
  
     <body>
         <h1>Notre interface de Chat</h1>
 
-        <input type="text" name="messageToSend" id="messageToSend" placeholder="Votre message..." size="50" autofocus />
-        <button onclick="sendAndReceive()"> Envoyer </button>
 
+        <div> 
+            <input type="text" name="messageToSend" id="messageToSend" placeholder="Votre message..." size="50" autofocus />
+            <button onclick="sendAndReceive()"> Envoyer </button>
+        </div>
+       
+        <div> <br> </div>
 
-        <section id="zone_chat">
-            
-        </section>
+        <div><section id="zone_chat"></section></div>
 
 
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -56,7 +61,7 @@
             
             // Ajoute un message dans la page
             function insereMessage(pseudo, message) {
-                $('#zone_chat').prepend('<p><strong>' + pseudo + '</strong> ' + message + '</p>');
+                $('#zone_chat').prepend('<p><strong>' + pseudo + ' : </strong> ' + message + '</p>');
 
                 messageToSend.value = '';
                 messageToSend.focus();
