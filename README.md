@@ -4,9 +4,12 @@ Pour téléharger MongoDB (Linux): https://docs.mongodb.com/manual/tutorial/inst
 
 Afin d'installer tous les modules présents dans le fichier package.json, executez la commande `npm install`
 
+Si vous êtes sous Linux,
 Lancez ensuite MongoDB avec la commande `sudo systemctl start mongod`.
-
 Vous pouvez ensuite lancer le serveur avec la commande `npm run dev`.
+
+Si vous êtes sous Windows, lancez simplement MongoDB via l'interface "Services" de Windows.
+
 
 Pour accéder à l'interface créée par nos soins permettant de discuter avec le bot, vous devez vous rendre à l'adresse http://localhost:5000/chat/botID où botID est l'identifiant du bot avec lequel vous voulez discuter. N'oubliez pas de recharger la page après avoir activé un bot pour vous répondre.
 
@@ -14,4 +17,4 @@ Vous pouvez également vous connecter sur Discord sur le serveur de Delphine (li
 
 Pour accéder à l'interface d'administration des bots, vous devez vous rendre à l'adresse http://localhost:5000.
 
-Par défaut, les bots créés sont tous inactifs au démarrage du serveur. N'oubliez pas de les activer avant d'essayer de leur parler.
+Attention ! Par défaut, les bots créés sont tous inactifs au démarrage du serveur. N'oubliez pas de les activer avant d'essayer de leur parler.
