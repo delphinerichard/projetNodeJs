@@ -91,10 +91,10 @@
 + quelle est ma couleur favorite
 - Ta couleur préférée est <get color>.
 
-+ quel est mon loisir favori ?
++ quel est mon loisir favori
 - Ton loisir favori est <get loisir>.
 
-+ quel est mon livre favori ?
++ quel est mon livre favori
 - Ton livre préféré est <get livre>.
 
 + *
