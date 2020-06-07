@@ -8,12 +8,15 @@ Si vous êtes sous Linux,
     Lancez ensuite MongoDB avec la commande `sudo systemctl start mongod`.
     Vous pouvez ensuite lancer le serveur avec la commande `npm run dev`.
 
-Si vous êtes sous Windows, lancez simplement MongoDB via l'interface "Services" de Windows.
+
+Si vous êtes sous Windows,
+    Lancez simplement MongoDB via l'interface "Services" de Windows.
+    Vous pouvez ensuite lancer le serveur avec la commande `node app.js`.
 
 
 
 
-Pour utiliser l'application (à lancer avec la commande `node app.js`), vous pouvez :
+Pour utiliser l'application, vous pouvez :
 
     Vous rendre à l'adresse http://localhost:5000.
 Il s'agit de la page d'administration des bots. Vous pourrez ajouter un nouveau bot en donnant son nom et en cliquant sur le bouton "Créer le bot". Vous pourrez aussi afficher les bots déjà existants dans la base de données (bouton "Afficher les bots"). Enfin, vous pourrez modifier un bot existant en utilisant son identifiant (visible lors de l'affichage des bots).
