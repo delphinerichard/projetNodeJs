@@ -1,0 +1,102 @@
+!  version = 2.0
+
+// Bot Variables
+! var name     = Bob
+
+// Substitutions
+! sub &apos;        = '
+! sub m'appelle     = suis
+! sub j'habite      = je vis
+! sub j'habite à    = je viens de
+! sub n'ai          = ne ai
+! sub demande-moi   = demande moi
+! sub dis-moi       = dis moi
+! sub chômage       = chomage
+! sub préférée      = favorite
+! sub préféré       = favori
+! sub où            = ou
+
++ bonjour
+- Salut ! Je suis un bot de test.
+- Bonjour ! Comment vas-tu ?
+
++ (je vais bien|bien) et toi
+- Je vais bien, merci !
+
++ (je ne vais pas bien|je suis triste)
+- Je suis désolé pour toi...
+
++ bonsoir
+- Bonsoir humain.e ! 
+- Bonsoir à toi aussi !
+
++ salut
+- Bonjour ! Tu vas bien ?
+- Salut !
+
++ (oui|je vais bien)
+- Super !
+
++ non
+- C'est triste
+
++ ca va 
+- Je vais bien merci !
+
++ demande moi (quelque|autre) chose
+- Quel est ton nom ?
+- Où habites-tu ?
+- Quel est ton travail ?
+- Quelle est ta couleur préférée ?
+- Quel est ton loisir favori ?
+- Quel est ton livre préféré ?
+
++ je suis *
+- <set name=<formal>>Content de faire ta connaissance, <get name>.
+
++ je viens de *
+- <set location=<formal>>Vraiment ? Je n'ai jamais rencontré personne venant de <get location> !
+- <set location=<formal>>On m'a dit que c'était très joli comme endroit.
+
++ je travaille *
+- <set job=<formal>>Ouah ! C'est super !
+
++ mon travail est *
+- <set job=<formal>>Ouah ! C'est super !
+
++ je (ne travaille pas|ne ai pas de travail|suis au chomage)
+- <set job=none>Je suis désolé pour toi.
+
++ ma couleur favorite est *
+- <set color=<formal>>C'est une très jolie couleur !
+
++ je ne ai pas de couleur favorite
+- <set color=none>Moi, j'aime beaucoup le bleu.
+
++ mon loisir favori est *
+- <set loisir=<formal>>Oh, moi aussi j'aime <get loisir> !
+
++ mon livre favori est *
+- <set livre=<formal>>La lecture, c'est formidable !!!
+
++ quel est mon nom
+- Tu t'appelles <get name>.
+
++ dis moi ou je vis
+- Tu vis à <get location>.
+
++ quel est mon travail
+- Tu travailles <get job>.
+
++ quelle est ma couleur favorite
+- Ta couleur préférée est <get color>.
+
++ quel est mon loisir favori
+- Ton loisir favori est <get loisir>.
+
++ quel est mon livre favori
+- Ton livre préféré est <get livre>.
+
++ *
+- Je ne comprends pas ce que vous dites...
+- Êtes vous sûr.e que vous parlez français ? Je ne vous comprends pas...

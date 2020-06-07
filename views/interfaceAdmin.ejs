@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Administration des bots</title>
+        <style>
+            body {
+                font-family: sans-serif !important;
+            }
+            h2 {
+                color: white;
+            }
+        </style>
+    </head>
+    
+    <body>
+
+        
+        <h1>Service d'aministration de ChatBot</h1>
+
+        <table >
+            <td>
+                <h3><strong>Affichage des bots </strong></h3>
+                <div>
+                    <button onclick="afficherBots()"> Afficher les bots </button>
+                </div>
+            </td>
+            <td><h2>............</h2></td>
+            <td>
+                <h3><strong> Ajout des bots</strong></h3>
+                <div>
+                    <input id="nom" name="nom" placeholder="Nom du bot"></input>
+                    <button onclick="ajouterBot()"> Créer le bot </button>
+                </div>
+            </td>
+
+            </table>
+
+            <h3><strong>Modification des bots</strong></h3>
+        <div>
+            <input type="text" name="idBot" id="idBot" placeholder="Id du bot à modifier" size="50" autofocus />
+        </div>
+        <div>
+            <button onclick="supprimerBot()"> Supprimer le bot </button>
+            <button onclick="activerBot()"> Activer le bot </button>
+            <button onclick="desactiverBot()"> Desactiver le bot </button>
+        </div>
+        <div>
+            <button onclick="chat()"> Passer le bot sur l'interface Chat </button>
+            <button onclick="discord()"> Passer le bot sur l'interface Discord </button>
+        </div>
+        <div>
+            <table>
+                <td>
+                    <input type="text" name="nouveauCerveau" id="nouveauCerveau" placeholder="Nom du nouveau cerveau" size="27" autofocus />
+                    <button onclick="changerCerveau()"> Changer de cerveau </button>
+                </td>
+                <td><br></td>
+                <td>
+                    <p><i>Cerveaux disponibles : standard, cerveau1</i></p>
+                </td>
+            </table>
+        </div>
+
+        <h3><strong>Liste des bots : </strong></h3>
+
+        <textarea name="bots" id="bots" cols="140" rows="10"></textarea>
+
+
+        <script type="text/javascript">
+
+            function afficherBots (){
+                fetch("/admin/", {
+                    method: "GET",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    bots.value=JSON.stringify(data.bots);
+                })
+            }            
+
+            function ajouterBot (){
+                fetch("/admin/", {
+                    method: "POST",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({nom: nom.value})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                nom.value = '';
+            }
+
+
+            function supprimerBot() {
+                fetch("/admin/"+idBot.value, {
+                    method: "DELETE",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function changerCerveau() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({cerveau: nouveauCerveau.value})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+                nouveauCerveau.value='';
+            }
+
+            function activerBot() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({actif: true})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function desactiverBot() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({actif: false})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function chat() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({interface: 'Chat'})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+            function discord() {
+                fetch("/admin/"+idBot.value, {
+                    method: "PUT",
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({interface: 'Discord'})})
+                .then(res=> {return res.json()})
+                .then(data => {
+                    alert(data.msg)
+                })
+                idBot.value = '';
+            }
+
+        </script>
+    </body>
+</html>
