@@ -1,7 +1,7 @@
 !  version = 2.0
 
 // Bot Variables
-! var name     = Aiden
+! var name     = Bob
 
 // Substitutions
 ! sub &apos;        = '
@@ -48,6 +48,8 @@
 - Où habites-tu ?
 - Quel est ton travail ?
 - Quelle est ta couleur préférée ?
+- Quel est ton loisir favori ?
+- Quel est ton livre préféré ?
 
 + je suis *
 - <set name=<formal>>Content de faire ta connaissance, <get name>.
@@ -71,6 +73,12 @@
 + je ne ai pas de couleur favorite
 - <set color=none>Moi, j'aime beaucoup le bleu.
 
++ mon loisir favori est *
+- <set loisir=<formal>>Oh, moi aussi j'aime <get loisir> !
+
++ mon livre favori est *
+- <set livre=<formal>>La lecture, c'est formidable !!!
+
 + quel est mon nom
 - Tu t'appelles <get name>.
 
@@ -82,6 +90,12 @@
 
 + quelle est ma couleur favorite
 - Ta couleur préférée est <get color>.
+
++ quel est mon loisir favori ?
+- Ton loisir favori est <get loisir>.
+
++ quel est mon livre favori ?
+- Ton livre préféré est <get livre>.
 
 + *
 - Je ne comprends pas ce que vous dites...
