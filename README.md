@@ -29,7 +29,7 @@ Il s'agit de l'interface de chat (botID étant l'identifiant du bot avec lequel 
 N'oubliez pas d'activer le bot avant de charger la page de l'interface de chat afin qu'il puisse vous répondre.
 Vous pouvez changer le cerveau du bot en cours de conversation sans avoir besoin de recharger la page.
 
-    Vous rendre sur le serveur Discord de Delphine (lien d'invitation : https://discord.gg/J6DDebg).
+    Vous rendre sur le serveur Discord de Delphine.
 Vous pourrez discuter avec le bot sur Discord de la même manière que sur le chat. 
 Attention à bien passer le bot sur l'interface Discord, PUIS à l'activer avant de commencer la conversation.
 Vous pouvez également changer de cerveau en cours de conversation.
